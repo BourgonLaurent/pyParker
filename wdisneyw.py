@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen as uReq
 import urllib.request
 import datetime
-
+import os
 
 # Sources URL
 mk = "https://www.laughingplace.com/w/p/magic-kingdom-current-wait-times/" # Magic Kingdom
@@ -27,6 +27,7 @@ date, time = r_datetime.split("\n")
 
 date, ophour = date.split(": ")
 date = date.replace("Operating Hours For ", "")
+day, date = date.split(", ")
 
 time = time.replace("Last Check at ", "")
 time = time.replace(":", ".")
@@ -39,22 +40,17 @@ containers = list(dict.fromkeys(containers))
 t_break = "\n"
 w_break = "\n\n\n\n"
 
-temp = "temp"
+temp = "temp.csv"
 filename = "{} - {} - {}.csv".format(date, park, time)
 f = open(temp, "w+")
 
-headers = "Attraction, Time\n"
-f.write(headers)
-""" for container in containers:
-    entry = container.text.strip()
-    #if "\n\n\n\n" in entry:
-    #    c_entry = entry.replace("\n\n\n\n", ", ")
-    if "\n" in entry:
-        c_entry = entry.replace("\n", ", ")
-    if ", , , , , " in c_entry:
-        c_entry = c_entry.replace(", , , , , ", ", ")
-    #att, tim = entry.split(", ")
-    f.write(c_entry + "\n") """
+location = "location.csv"
+z = open(location, "w+")
+
+loc = "{},{},{}".format(park, date, time)
+z.write(loc)
+#headers = "Attraction, Time\n"
+#f.write(headers) #CSV headers creation
 
 mklist = []
 
@@ -63,13 +59,36 @@ for container in containers:
     #if "\n\n\n\n" in entry:
     #    c_entry = entry.replace("\n\n\n\n", ", ")
     if "\n" in entry:
-        c_entry = entry.replace("\n", ", ")
-    if ", , , , , " in c_entry:
-        c_entry = c_entry.replace(", , , , , ", ", ")
+        c_entry = entry.replace("\n", ",", 1)
+        c_entry = c_entry.replace('\n','')
+    if " minutes" in c_entry:
+        c_entry = c_entry.replace(" minutes", "")
+    if "“" in c_entry:
+        c_entry = c_entry.replace("“", "")
+    if "”" in c_entry:
+        c_entry = c_entry.replace("”", "")
+    if "’" in c_entry:
+        c_entry = c_entry.replace("’", "")
+    if "~" in c_entry:
+        c_entry = c_entry.replace("~", "")
+    if "Monsters, Inc. Laugh Floor" in c_entry:
+        c_entry = c_entry.replace("Monsters, Inc. Laugh Floor", "Monsters Inc. Laugh Floor")
     #att, tim = entry.split(", ")
     mklist.append(c_entry)
 
-mklist = list(dict.fromkeys(mklist))
+mklist = list(dict.fromkeys(mklist)) #Remove duplicates
 
-for i in mklist:
+for i in mklist: #Write to file
     f.write(i + "\n")
+
+"""
+Exemple de ce que je veux
+finalfinal = park + " - " + attraction (ex. Magic Kingdom - Astro Orbiter.csv)
+Dans le csv:
+date, time, wait
+Jul 02, 5.02pm, 30 
+"""
+#print(mklist)
+
+#import wdisorting
+#import wdisorting
