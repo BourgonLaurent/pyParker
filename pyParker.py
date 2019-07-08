@@ -1,3 +1,4 @@
+﻿#!/usr/bin/python3
 from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen as uReq
 import urllib.request
@@ -21,38 +22,40 @@ def verifConfig():
     makeDir("./data/")
     makeDir("./data/Magic Kingdom/")
     makeDir("./data/Epcot/")
-    makeDir("./data/Disney's Hollywood Studios/")
-    makeDir("./data/Disney's Animal Kingdom/")
+    makeDir("./data/Hollywood Studios/")
+    makeDir("./data/Animal Kingdom/")
 
     makeFile("./data/Magic Kingdom/[INFORMATION].csv")
     makeFile("./data/Epcot/[INFORMATION].csv")
-    makeFile("./data/Disney's Hollywood Studios/[INFORMATION].csv")
-    makeFile("./data/Disney's Animal Kingdom/[INFORMATION].csv")
+    makeFile("./data/Hollywood Studios/[INFORMATION].csv")
+    makeFile("./data/Animal Kingdom/[INFORMATION].csv")
 
 def retrieveHTML(selected_park):
     global mk, ep, hs, ak
 
-    if selected_park not in (mk, ep, hs, ak): #Check if park exists
+    if selected_park not in (mk, ep, hs, ak):  # Check if park exists
         print("Invalid park selected")
         sys.exit()
-    #else: #DEBUG
-        #print(selected_park)
+    # else: #DEBUG
+        # print(selected_park)
     # Specify User-Agent to prevent Error 403: Forbiden
     user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36"
     # Create url by using the park specified
     selected_url = "https://www.laughingplace.com/w/p/{}-current-wait-times/".format(selected_park)
-    req = urllib.request.Request(selected_url,headers={"User-Agent": user_agent}) # setting headers to go incognito
-    uClient = uReq(req) # opening up connection
-    page_html = uClient.read() # grabbing page
-    uClient.close() # closing connection
+    req = urllib.request.Request(selected_url, headers={"User-Agent": user_agent})  # setting headers to go incognito
+    uClient = uReq(req)  # opening up connection
+    page_html = uClient.read()  # grabbing page
+    uClient.close()  # closing connection
     return page_html
 
 
 def webScrape(page_html):
-    page_soup = soup(page_html, "lxml") #html parsing
-    title = page_soup.h1.text.strip() #Title of the page
-    park = title.replace(" Current Wait Times", "") # Name of the park
-    r_datetime = page_soup.findAll("div", {"class":"header"})[0].text.strip() #Find the locations
+    page_soup = soup(page_html, "lxml")  # html parsing
+    title = page_soup.h1.text.strip()  # Title of the page
+    park = title.replace(" Current Wait Times", "")  # Name of the park
+    if "Disney's " in park:
+        park = park.replace("Disney's ", "")
+    r_datetime = page_soup.findAll("div", {"class": "header"})[0].text.strip()  # Find the locations
 
     date, time = r_datetime.split("\n")
     date, ophour = date.split(": ")
@@ -65,20 +68,22 @@ def webScrape(page_html):
     containers = table.findAll("tr")
     containers = list(dict.fromkeys(containers))
 
-    location={}
-    location["park"]=park
-    location["ophour"]=ophour
-    location["date"]=date
-    location["day"]=day
-    location["time"]=time
+    location = {}
+    location["park"] = park
+    location["ophour"] = ophour
+    location["date"] = date
+    location["day"] = day
+    location["time"] = time
 
     attlist = {}
     for container in containers:
-        entry = container.text.strip()
+        c_entry = container.text.strip()
         #Cleaning entries
-        if "\n" in entry:
-            c_entry = entry.replace("\n", ",", 1)
+        if "\n" in c_entry:
+            c_entry = c_entry.replace("\n", ",", 1)
             c_entry = c_entry.replace('\n','')
+        else:
+            continue
         if " minutes" in c_entry:
             c_entry = c_entry.replace(" minutes", "")
         if "“" in c_entry:
@@ -101,9 +106,11 @@ def webScrape(page_html):
             c_entry = c_entry.replace(":", "")
         if "™" in c_entry:
             c_entry = c_entry.replace("™", "")
-        #Split entry to have 2 values
+        if u"\u2018" in c_entry:
+            c_entry = c_entry.replace(u"\u2018", "")
+        # Split entry to have 2 values
         att, time = c_entry.split(",")
-        #Add to dictionnary
+        # Add to dictionnary
         attlist[att] = time
     return attlist, location
 
