@@ -6,6 +6,7 @@
 
 - `Python3` (might work with `Python2`, but not tested and will not be supported)
   - [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/) installed
+  - `urllib3`, it is a default python module, but on some installations it isn't
 - Internet connection
 - Rights in the folder you're in (especially on Synology's DSM)
 
