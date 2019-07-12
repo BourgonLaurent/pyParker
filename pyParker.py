@@ -16,7 +16,9 @@ def makeFile(file):
         open(file, 'a').close()
 
 def iniconfig():
-    if os.path.isfile("config.ini"):
+    global path
+
+    if os.path.isfile(path + "config.ini"):
         pass
     else:
         print("[*] This is the first time that you run this program, you will go through the configurator first.\n\n")
@@ -52,7 +54,7 @@ def iniconfig():
                            "hollywoodStudios": configParks["hollywoodStudios"],
                            "animalKingdom": configParks["animalKingdom"]}
         config["Options"] = {"timeout": timeout}
-        with open("config.ini", "w") as configfile:
+        with open(path + "config.ini", "w") as configfile:
             config.write(configfile)
 
 def verifConfig():
@@ -72,21 +74,22 @@ def verifConfig():
         makeFile(datapath + "/Animal Kingdom/[INFORMATION].csv")
 
 def readConfig():
+    global path, E001
     config = configparser.ConfigParser()
-    config.read("config.ini")
+    config.read(path + "config.ini")
     # Check if the config file is correct
     if "Paths" in config:
         pass
     else:
-        sys.exit("[!] ERROR 0-01: Your config.ini file is incorrect, please delete it and try again.")
+        sys.exit(E001)
     if "Parks" in config:
         pass
     else:
-        sys.exit("[!] ERROR 0-01: Your config.ini file is incorrect, please delete it and try again.")
+        sys.exit(E001)
     if "Options" in config:
         pass
     else:
-        sys.exit("[!] ERROR 0-01: Your config.ini file is incorrect, please delete it and try again.")
+        sys.exit(E001)
     
     datapath = config["Paths"]["datapath"]
     magickingdom = config["Parks"].getboolean("magickingdom")
@@ -219,10 +222,13 @@ def storeWaitTimes(mainpark):
     attlist, location = webScrape(page_html) #Retrieve Attractions and Wait
     writeCSV(attlist, location) #Write to a CSV
 
+E001 = "[!] ERROR 0-01: Your config.ini file is incorrect, please delete it and try again."
+
 mk = "magic-kingdom" #Source URL
 ep = "Epcot"
 hs = "Disneys-Hollywood-Studios"
 ak = "Disneys-Animal-Kingdom"
+path = os.path.realpath(__file__).replace(os.path.basename(__file__), "")
 
 iniconfig()
 datapath, magickingdom, epcot, hollywoodstudios, animalkingdom, timeout = readConfig()
