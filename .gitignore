@@ -103,11 +103,10 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# personnel
+# Project related
 data/*
-location.csv
-temp.csv
 synpyParker.py
+config.ini
 
-#Vscode
+# Vscode
 .vscode/*
