@@ -1,5 +1,14 @@
 # pyParker
 
+                  ______               _                
+                  | ___ \             | |               
+     _ __   _   _ | |_/ /  __ _  _ __ | | __  ___  _ __ 
+    | '_ \ | | | ||  __/  / _` || '__|| |/ / / _ \| '__|
+    | |_) || |_| || |    | (_| || |   |   < |  __/| |   
+    | .__/  \__, |\_|     \__,_||_|   |_|\_\ \___||_|   
+    | |      __/ |                                      
+    |_|     |___/    
+
 `Python3`program that records wait times and extra information at Walt Disney World, FL. Created this program to plan a family trip at Walt Disney World.
 
 ## Requirements
@@ -22,13 +31,15 @@
 
 A folder `data` will be created, inside this folder there will be sub-folders for each park. Inside these folders you will find a file for each attraction and a [INFORMATION].csv file, this file contains *the date, the day of the week, the opening hours and Extra Magic Hours.* To interpret the data, you will have to use an external tool.
 
+To have it log wait times automatically, you will have to schedule a task (using Windows Task Scheduler, cron, Synology's Task Scheduler, etc.).
+
 ## TODO
 
 (This list is made in chronological order, it may change)
 
 - Create a repository that will have the waits I logged by commiting changes automatically.
 - Transform all the web scraping in a module.
-- Make a sudo-GUI to create a script for automation (currently the script needs to be modified manually to use on a Synology).
+- Make a TUI to create a script for automation (currently the script needs to be modified manually to use on a Synology).
 - Take data directly from Disney, this will provide accurate data at the time specified.
 - Support Disneyland, CA and Universal Studios, FL (same website, same webscrape, just need to implement it)
 - Support other parks (Six Flag and others).
@@ -37,7 +48,7 @@ A folder `data` will be created, inside this folder there will be sub-folders fo
 
 ## Credits
 
-Data taken from [Laughing Place](http://laughingplace.com), there's a way to take them from Disney directly.
+Data taken from [Laughing Place](http://laughingplace.com), there's a way to take them from Disney directly, it will come one day.
 
 ## Licensing
 
