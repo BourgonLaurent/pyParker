@@ -9,37 +9,53 @@
     | |      __/ |                                      
     |_|     |___/    
 
-`Python3`program that records wait times and extra information at Walt Disney World, FL. Created this program to plan a family trip at Walt Disney World.
+`Python3` program that records wait times and extra information at Walt Disney World, FL. Created this program to plan a family trip at Walt Disney World.
 
 ## Requirements
 
 - `Python3` (might work with `Python2`, but not tested and will not be supported)
-  - [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/) installed
-  - `urllib3`, it is a default python module, but on some installations it isn't
+  - [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/) installed (`pip install bs4`)
+  - `urllib3`, it is a default python module, but on some installations it isn't (`pip install urllib3`)
+  - `lxml`, use pip (`pip install lxml`)
 - Internet connection
 - Rights in the folder you're in (especially on Synology's DSM)
 
 ## Instructions
 
 1. Download the latest version of `pyParker.py` in [Releases](https://github.com/BourgonLaurent/pyParker/releases)
-    - It is recommended to put it it's own folder, because it will create automatically a folder `data` at the place where it executed
-2. If you don't have `Python3` installed, [install it](https://www.python.org/downloads/)
-3. If you don't have `BeautifulSoup4`, install it [manually](https://www.crummy.com/software/BeautifulSoup/) or with `pip` (`pip install beautifulsoup4`)
+    - It is recommended to put it it's own folder, because it will create automatically a folder `data` at the place where it executed if you use the default location
+2. If you don't have `Python3` installed, [install it manually](https://www.python.org/downloads/) or use a package manager(recommended) (apt on Linux, homebrew on macOS, chocolatey on Windows, etc.)
+3. Make sure you have the required `Python3` modules installed ([check Requirements](README.md#Requirements))
 4. Open Terminal/CMD/Powershell, navigate to `pyParker.py`'s folder (using `cd`) and run the script by entering `python3 pyParker.py`.
 
 ## Using it
 
-A folder `data` will be created, inside this folder there will be sub-folders for each park. Inside these folders you will find a file for each attraction and a [INFORMATION].csv file, this file contains *the date, the day of the week, the opening hours and Extra Magic Hours.* To interpret the data, you will have to use an external tool.
+At the first run (or if the `config.ini` is deleted), the configurator will load. It will ask you were you want to store the files, which parks you want and if you want to use a sleep option for task scheduler that only support intervals of 10 minutes. Here is the default config (if you press `Enter` at each prompt)
+| Prompt                                                                                                                | Default | What it does                                                   | Example                                                                                                                     |
+|-----------------------------------------------------------------------------------------------------------------------|---------|----------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
+| Where do you want the files stored?*                                                                                  | ./data/ | A folder `data` will be created at the location of the script. | C:\pyParker\data will be created, where `pyParker.py` is in C:pyParker\                                                     |
+| Here's a list of parks, select those that you want to log [Y]es/[N]o:                                                 | No      | The park won't be logged.                                      | If you skip Magic Kingdom by pressing `Enter` or some other than Y or Yes, Magic Kingdom will not be logged by the program. |
+| You can specify a time in seconds to pause the script, useful if your task scheduler only has intervals of 10 minutes | 0       | The program will not be put in sleep, it will be instant.      | When you run the program, it will directly fetch the wait times, as fast as possible.                                       |
 
-To have it log wait times automatically, you will have to schedule a task (using Windows Task Scheduler, cron, Synology's Task Scheduler, etc.).
+\*_You can specify the data folder easily by drag-and-dropping the folder in your shell interface._
+
+Inside the folder specified (or the default one) there will be sub-folders for each park. Inside these folders you will find a file for each attraction and an [INFORMATION].csv file, this file contains *the date, the day of the week, the opening hours and Extra Magic Hours.* To interpret the data, you will have to use an external tool.
+
+To have it log wait times automatically, you will have to schedule a task using Windows Task Scheduler, cron, Synology's Task Scheduler, etc. This gives more flexibility to the user and reduces the number of errors/memory leak of the program.
+
+If you have a server that is headless (does not have a GUI) and that you can't run this program through command-line or SSH, you will have to execute it on your computer and then transfer the `pyParker.py` and `config.ini` file on your server. Remember to use the right paths that are corresponding to your NAS/Server and not your computer.
+
+For Synology's DSM users, if you use relative paths (AKA the default) in the config file, you will have some problems, please specify a whole path (ex: `/volume1/Documents/pyParker/data/`)
+
+To use the configurator again, you just have to delete the `config.ini` file.
 
 ## TODO
 
-(This list is made in chronological order, it may change)
+(This list is made in chronological order of happening, it may change)
 
 - Create a repository that will have the waits I logged by commiting changes automatically.
 - Transform all the web scraping in a module.
-- Make a TUI to create a script for automation (currently the script needs to be modified manually to use on a Synology).
+- ~~Make a TUI to create a script for automation (currently the script needs to be modified manually to use on a Synology).~~ *Fixed by making a `config.ini` file that the program reads and creates at first run*
 - Take data directly from Disney, this will provide accurate data at the time specified.
 - Support Disneyland, CA and Universal Studios, FL (same website, same webscrape, just need to implement it)
 - Support other parks (Six Flag and others).

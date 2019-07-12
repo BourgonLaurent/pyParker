@@ -1,35 +1,101 @@
 ﻿#!/usr/bin/python3
 from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen as uReq
-import urllib.request
-import datetime
-import os
-import csv
-import sys
+import urllib.request, time, os, csv, sys, configparser
 
 def makeDir(directory):
     if os.path.isdir(directory):
         pass
     else:
         os.mkdir(directory)
+
 def makeFile(file):
     if os.path.isfile(file):
         pass
     else:
         open(file, 'a').close()
 
+def iniconfig():
+    if os.path.isfile("config.ini"):
+        pass
+    else:
+        print("[*] This is the first time that you run this program, you will go through the configurator first.\n\n")
+        datapath = input("Where do you want the files stored?\n\tBy leaving this empty, you will be using the default location\n\t[Default is ./data/, AKA it will create a folder \"data\" in your current directory]: ")
+        if datapath == "":
+            datapath = "./data/"
+
+        print("\nHere's a list of parks, select those that you want to log [Y]es/[N]o:")
+        parks = {}
+        # Ask for each park and store the answer in a dictionnary
+        parks["magicKingdom"] = input("Magic Kingdom [Y]es/[N]o: ")
+        parks["epcot"] = input("Epcot [Y]es/[N]o: ")
+        parks["hollywoodStudios"] = input("Hollywood Studios [Y]es/[N]o: ")
+        parks["animalKingdom"] = input("Animal Kingdom [Y]es/[N]o: ")
+        configParks = {}
+        # Convert the input of the user in a boolean for the config file
+        for park in parks:
+            if parks[park] in ("Y", "y", "Yes", "yes", "1"):
+                configParks[park] = "true"
+            else:
+                configParks[park] = "false"
+
+        timeout = input("\nYou can specify a time in seconds to pause the script, useful if your task scheduler only has intervals of 10 minutes\n\tBy leaving this empty, you will be using the default value\n\t[Default is 0s, AKA instant]: ")
+        if timeout == "":
+            timeout = 0
+        else:
+            timeout = int(timeout)
+        
+        config = configparser.ConfigParser()
+        config["Paths"] = {"datapath": datapath}
+        config["Parks"] = {"magicKingdom": configParks["magicKingdom"],
+                           "epcot": configParks["epcot"],
+                           "hollywoodStudios": configParks["hollywoodStudios"],
+                           "animalKingdom": configParks["animalKingdom"]}
+        config["Options"] = {"timeout": timeout}
+        with open("config.ini", "w") as configfile:
+            config.write(configfile)
+
 def verifConfig():
-    makeDir("./data/")
-    makeDir("./data/Magic Kingdom/")
-    makeDir("./data/Epcot/")
-    makeDir("./data/Hollywood Studios/")
-    makeDir("./data/Animal Kingdom/")
+    global datapath, magickingdom, epcot, hollywoodstudios, animalkingdom
+    makeDir(datapath)
+    if magickingdom:
+        makeDir(datapath + "/Magic Kingdom/")
+        makeFile(datapath + "/Magic Kingdom/[INFORMATION].csv")
+    if epcot:
+        makeDir(datapath + "/Epcot/")
+        makeFile(datapath + "/Epcot/[INFORMATION].csv")
+    if hollywoodstudios:
+        makeDir(datapath + "/Hollywood Studios/")
+        makeFile(datapath + "/Hollywood Studios/[INFORMATION].csv")
+    if animalkingdom:
+        makeDir(datapath + "/Animal Kingdom/")
+        makeFile(datapath + "/Animal Kingdom/[INFORMATION].csv")
 
-    makeFile("./data/Magic Kingdom/[INFORMATION].csv")
-    makeFile("./data/Epcot/[INFORMATION].csv")
-    makeFile("./data/Hollywood Studios/[INFORMATION].csv")
-    makeFile("./data/Animal Kingdom/[INFORMATION].csv")
+def readConfig():
+    config = configparser.ConfigParser()
+    config.read("config.ini")
+    # Check if the config file is correct
+    if "Paths" in config:
+        pass
+    else:
+        sys.exit("[!] ERROR 0-01: Your config.ini file is incorrect, please delete it and try again.")
+    if "Parks" in config:
+        pass
+    else:
+        sys.exit("[!] ERROR 0-01: Your config.ini file is incorrect, please delete it and try again.")
+    if "Options" in config:
+        pass
+    else:
+        sys.exit("[!] ERROR 0-01: Your config.ini file is incorrect, please delete it and try again.")
+    
+    datapath = config["Paths"]["datapath"]
+    magickingdom = config["Parks"].getboolean("magickingdom")
+    epcot = config["Parks"].getboolean("epcot")
+    hollywoodstudios = config["Parks"].getboolean("hollywoodstudios")
+    animalkingdom = config["Parks"].getboolean("animalkingdom")
+    timeout = int(config["Options"]["timeout"])
 
+    return datapath, magickingdom, epcot, hollywoodstudios, animalkingdom, timeout
 def retrieveHTML(selected_park):
     global mk, ep, hs, ak
 
@@ -47,7 +113,6 @@ def retrieveHTML(selected_park):
     page_html = uClient.read()  # grabbing page
     uClient.close()  # closing connection
     return page_html
-
 
 def webScrape(page_html):
     page_soup = soup(page_html, "lxml")  # html parsing
@@ -114,9 +179,9 @@ def webScrape(page_html):
         attlist[att] = time
     return attlist, location
 
-
 def writeCSV(attlist, location):
-    filename_info = "data/{}/[INFORMATION].csv".format(location["park"])
+    global datapath
+    filename_info = datapath + "/{}/[INFORMATION].csv".format(location["park"])
     writeinfo = location["date"] + "," + location["day"] + "," + location["ophour"] + "\n"
 
     #Check if we need to write to [INFORMATION].csv
@@ -131,7 +196,7 @@ def writeCSV(attlist, location):
     f.close()
     inf.close()
     for att in attlist:
-        filename = "data/{}/{}.csv".format(location["park"], att)
+        filename = datapath + "/{}/{}.csv".format(location["park"], att)
         wait = str(attlist[att])
         headers = "Date,Time,Wait\n"
         writedata = location["date"] + "," + location["time"] + "," + wait + "\n"
@@ -159,8 +224,15 @@ ep = "Epcot"
 hs = "Disneys-Hollywood-Studios"
 ak = "Disneys-Animal-Kingdom"
 
+iniconfig()
+datapath, magickingdom, epcot, hollywoodstudios, animalkingdom, timeout = readConfig()
 verifConfig()
-storeWaitTimes(mk)
-storeWaitTimes(ep)
-storeWaitTimes(hs)
-storeWaitTimes(ak)
+time.sleep(timeout)
+if magickingdom:
+    storeWaitTimes(mk)
+if epcot:
+    storeWaitTimes(ep)
+if hollywoodstudios:
+    storeWaitTimes(hs)
+if animalkingdom:
+    storeWaitTimes(ak)
