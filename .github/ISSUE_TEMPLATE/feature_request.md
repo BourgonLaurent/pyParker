@@ -2,7 +2,7 @@
 name: Feature request
 about: You have an idea to make this program better? Tell me!
 title: "[FEATURE REQUEST] "
-labels: ''
+labels: enhancement
 assignees: BourgonLaurent
 
 ---

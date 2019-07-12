@@ -1,18 +1,18 @@
 ---
-name: Bug report
-about: You find a bug! Oh no, I will go take some bug repellent for you!
-title: "[BUG] "
-labels: bug
+name: Need help to use the program
+about: Do you need help to setup the program? I can help you!
+title: "[HELP] "
+labels: help wanted
 assignees: BourgonLaurent
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**Describe the problem**
+A clear and concise description of what the problem is.
 [DESCRIPTION HERE]
 
 **To Reproduce**
-Steps to reproduce the behavior:
+Steps to reproduce the behavior (if you tried something):
 
 [EXAMPLE
 1. Go to '...'
