@@ -31,11 +31,13 @@
 ## Using it
 
 At the first run (or if the `config.ini` is deleted), the configurator will load. It will ask you were you want to store the files, which parks you want and if you want to use a sleep option for task scheduler that only support intervals of 10 minutes. Here is the default config (if you press `Enter` at each prompt)
+
 | Prompt                                                                                                                | Default | What it does                                                   | Example                                                                                                                     |
 |-----------------------------------------------------------------------------------------------------------------------|---------|----------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
 | Where do you want the files stored?*                                                                                  | ./data/ | A folder `data` will be created at the location of the script. | C:\pyParker\data will be created, where `pyParker.py` is in C:pyParker\                                                     |
 | Here's a list of parks, select those that you want to log [Y]es/[N]o:                                                 | No      | The park won't be logged.                                      | If you skip Magic Kingdom by pressing `Enter` or some other than Y or Yes, Magic Kingdom will not be logged by the program. |
 | You can specify a time in seconds to pause the script, useful if your task scheduler only has intervals of 10 minutes | 0       | The program will not be put in sleep, it will be instant.      | When you run the program, it will directly fetch the wait times, as fast as possible.                                       |
+
 
 \*_You can specify the data folder easily by drag-and-dropping the folder in your shell interface._
 
