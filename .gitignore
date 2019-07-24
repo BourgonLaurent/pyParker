@@ -105,8 +105,8 @@ venv.bak/
 
 # Project related
 data/*
-synpyParker.py
-config.ini
+pyParker.ini
+DEBUG/*
 
 # Vscode
 .vscode/*
