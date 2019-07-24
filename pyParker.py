@@ -252,7 +252,7 @@ def retrieveWaitTime(park, ids):
 def writeWaitTime(park, data):
     global configfile, folderSwitcher
     for att in data:
-        fp = configfile["datapath"] + "/{}/{att}.csv".format(folderSwitcher.get(park), att)
+        fp = configfile["datapath"] + "/{}/{}.csv".format(folderSwitcher.get(park), att)
         with open(fp, "a") as file_fp:
             headers = "Date,Time,Wait\n"
             with open(fp, "r") as file_r:
