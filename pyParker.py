@@ -20,7 +20,7 @@ from MouseToolsbyScottCaratozzolo.parks import Park, MK_ID, EPCOT_ID, HS_ID, AK_
 from MouseToolsbyScottCaratozzolo.destinations import Destination, WDW_ID, DL_ID
 from configparser import ConfigParser
 from datetime import datetime
-import time, os, csv, sys, json
+import time, os, csv, sys
 
 ## List of errors
 errors = {
