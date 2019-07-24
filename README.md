@@ -36,30 +36,18 @@ At the first run (or if the `pyParker.ini` is deleted), the configurator will lo
 
 | Prompt                                                                                                                | Default | What it does                                                   | Example                                                                                                                   |
 |-----------------------------------------------------------------------------------------------------------------------|---------|----------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
-| Where do you want the files stored?*                                                                                  | ./data | A folder `data` will be created at the location of the script. | C:\pyParker\data will be created, if `pyParker.py` is in C:pyParker\                                                     |
-<<<<<<< HEAD
-| Here's a list of parks, select those that you want to log [Y]es/[N]o/[A]dvanced**:                                                 | No      | The world will not be logged.                                      | If you press `Enter` on `Walt Disney World, Orlando (Florida)`, the program will not store the wait times and information of Walt Disney World.|
-=======
+| Where do you want the files stored?*                                                                                  | ./data | A folder `data` will be created at the location of the script. | C:\pyParker\data will be created, if `pyParker.py` is in C:pyParker\                                                     |                                      | If you press `Enter` on `Walt Disney World, Orlando (Florida)`, the program will not store the wait times and information of Walt Disney World.|
 | Here's a list of parks, select those that you want to log [Y]es/[N]o/[A]dvanced**:                                                 | No      | The world will not be logged.                                      | If you press `Enter` on `Walt Disney World, Orlando (Florida)`, the program will not store the wait times and information.|
->>>>>>> 67bbe6c9cc58fc3928bdf71726be186300bab1ac
 | You can specify a time in seconds to pause the script, useful if your task scheduler only has intervals of 10 minutes | 0       | The program will not be put in sleep, it will be instant.      | When you run the program, it will directly fetch the wait times, as fast as possible.                                       |
 
 \*_You can specify the data folder easily by drag-and-dropping the folder in your shell interface._
 
 \**_You can select `A` and access advanced options to select a specific park (ex. you can log Magic Kingdom, but not Epcot)_
-<<<<<<< HEAD
 
 Inside the folder specified (or the default one) there will be sub-folders for each park. Inside these folders you will find a file for each attraction and an [INFORMATION].csv file, this file contains *the date, the day of the week, the opening hours and Extra Magic Hours.* To interpret the data in a graph or a table, you will have to use an external tool.
 
 To have it log wait times automatically, you will have to schedule a task using Windows Task Scheduler, cron, Synology's Task Scheduler, etc. This choice was made to give more flexibility to the user and reduce the possible number of errors or memory leak of the program.
 
-=======
-
-Inside the folder specified (or the default one) there will be sub-folders for each park. Inside these folders you will find a file for each attraction and an [INFORMATION].csv file, this file contains *the date, the day of the week, the opening hours and Extra Magic Hours.* To interpret the data in a graph or a table, you will have to use an external tool.
-
-To have it log wait times automatically, you will have to schedule a task using Windows Task Scheduler, cron, Synology's Task Scheduler, etc. This choice was made to give more flexibility to the user and reduce the possible number of errors or memory leak of the program.
-
->>>>>>> 67bbe6c9cc58fc3928bdf71726be186300bab1ac
 If you have a server that is headless (does not have a GUI) and that you can't run this program through command-line or SSH, you will have to execute it on your computer and then transfer the `pyParker.py` and `pyParker.ini` file on your server. Remember to use the right paths that are corresponding to your NAS/Server and not your computer.
 
 For Synology's DSM users, if you use relative paths (AKA the default) in the config file, you will have some problems, please specify a whole path (ex: `/volume1/Documents/pyParker/data/`)
