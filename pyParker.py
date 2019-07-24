@@ -194,9 +194,9 @@ def writeParkInformation(park):
         info_transformed.append("None")
 
     # Prepare the info to write it
-    info_transformed_ready = f"{info_transformed[0]},{info_transformed[1]},{info_transformed[2]},{info_transformed[3]},{info_transformed[4]},{info_transformed[5]}\n"
+    info_transformed_ready = "{},{},{},{},{},{}\n".format(info_transformed[0], info_transformed[1], info_transformed[2], info_transformed[3], info_transformed[4], info_transformed[5])
     # Get filepath of information.csv
-    info_fp = configfile["datapath"] + f"/{folderSwitcher.get(park)}/[INFORMATION].csv"
+    info_fp = configfile["datapath"] + "/{}/[INFORMATION].csv".format(folderSwitcher.get(park))
     # Write to file
     with open(info_fp,"a") as info_file:
         headers = "Date,Day,Opening Hours,Closing Hours,Extra Magic Hours Start,Extra Magic Hours End\n"
@@ -246,13 +246,13 @@ def retrieveWaitTime(park, ids):
             name = name.replace("\\'", "")
         
         time = datetime.now().strftime("%b %d,%I:%M%p")  # Get the current time
-        data[name] = f"{time},{wait}\n"  # Add the entry for the attraction
+        data[name] = "{},{}\n".format(time, wait)  # Add the entry for the attraction
     return data
 
 def writeWaitTime(park, data):
     global configfile, folderSwitcher
     for att in data:
-        fp = configfile["datapath"] + f"/{folderSwitcher.get(park)}/{att}.csv"
+        fp = configfile["datapath"] + "/{}/{att}.csv".format(folderSwitcher.get(park), att)
         with open(fp, "a") as file_fp:
             headers = "Date,Time,Wait\n"
             with open(fp, "r") as file_r:
