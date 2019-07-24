@@ -8,7 +8,7 @@ intro = """
 | .__/  \__, |\_|     \__,_||_|   |_|\_\ \___||_|   
 | |      __/ |   © Laurent Bourgon for pyParker, parkerGrapher
 |_|     |___/    © Scott Caratozzolo for MouseTools module
-                 v2.0.0
+                 v2.0.1
  
  - All data is taken directly from Disney's Internal API
     by using the MouseTools module.
@@ -182,14 +182,14 @@ def writeParkInformation(park):
     info_transformed = list()
     info_transformed.append(info[0].strftime("%b %d"))  # Store Month Day
     info_transformed.append(info[0].strftime("%a"))  # Store day of the week
-    info_transformed.append(info[0].strftime("%H:%M"))  # Store open
-    info_transformed.append(info[1].strftime("%H:%M"))  # Store close
+    info_transformed.append(info[0].strftime("%I:%M%p"))  # Store open
+    info_transformed.append(info[1].strftime("%I:%M%p"))  # Store close
     if info[2]:
-        info_transformed.append(info[2].strftime("%H:%M"))
+        info_transformed.append(info[2].strftime("%I:%M%p"))
     else:
         info_transformed.append("None")
     if info[3]:
-        info_transformed.append(info[3].strftime("%H:%M"))
+        info_transformed.append(info[3].strftime("%I:%M%p"))
     else:
         info_transformed.append("None")
 
@@ -245,7 +245,7 @@ def retrieveWaitTime(park, ids):
         if "\\'" in name:
             name = name.replace("\\'", "")
         
-        time = datetime.now().strftime("%b %d,%H:%M")  # Get the current time
+        time = datetime.now().strftime("%b %d,%I:%M%p")  # Get the current time
         data[name] = f"{time},{wait}\n"  # Add the entry for the attraction
     return data
 
