@@ -107,6 +107,7 @@ venv.bak/
 data/*
 pyParker.ini
 DEBUG/*
+releases/*
 
 # Vscode
 .vscode/*
